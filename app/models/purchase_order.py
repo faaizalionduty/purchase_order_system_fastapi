@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.hybrid import hybrid_property
 from datetime import datetime
 from app.database import Base
 
@@ -13,3 +14,7 @@ class PurchaseOrder(Base):
 
     supplier = relationship("Supplier")
     items = relationship("PurchaseItem", back_populates="order")
+
+    @hybrid_property
+    def total(self):
+        return sum(item.quantity * item.price for item in self.items)

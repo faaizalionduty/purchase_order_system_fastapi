@@ -22,6 +22,13 @@ def create_po(data: PurchaseOrderCreate, db: Session = Depends(get_db)):
     db.refresh(po)
     return po
 
+@router.get("/{po_id}", response_model=PurchaseOrderResponse)
+def get_po(po_id: int, db: Session = Depends(get_db)):
+    po = db.query(PurchaseOrder).get(po_id)
+    if not po:
+        raise HTTPException(404, "PO not found")
+    return po
+
 @router.put("/{po_id}/approve",
             dependencies=[Depends(require_roles("FINANCE"))])
 def approve_po(po_id: int, db: Session = Depends(get_db)):

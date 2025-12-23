@@ -23,6 +23,7 @@ class PurchaseOrderResponse(BaseModel):
     status: str
     created_at: datetime
     items: List[PurchaseItemResponse]
+    total: float
 
     class Config:
         from_attributes = True
